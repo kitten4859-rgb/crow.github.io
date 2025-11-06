@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>오늘의 행운</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background-color: #4B0E0E;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      color: #fff;
+      font-family: 'Pretendard', sans-serif;
+    }
+
+    .crow {
+      width: 100px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .crow:hover {
+      transform: scale(1.1);
+    }
+
+    .message {
+      margin-top: 20px;
+      font-size: 1.4rem;
+      text-align: center;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      max-width: 80%;
+    }
+
+    .show {
+      opacity: 1;
+    }
+
+    .particle {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-size: cover;
+      pointer-events: none;
+      animation: fall 3s linear forwards;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(600px) rotate(360deg);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 까마귀 아이콘 (SVG 형식) -->
+  <img src="https://upload.wikimedia.org/wikipedia/commons/0/07/Crow_silhouette.svg" alt="crow" class="crow" id="crowIcon">
+
+  <div class="message" id="messageBox"></div>
+
+  <script>
+    const messages = [
+      "오늘은 네가 주인공이야. 세상이 널 응원해.",
+      "작은 일에도 마음을 담으면 큰 행복이 온다.",
+      "깃털 하나에도 바람이 깃들 듯, 행운이 너를 감싼다.",
+      "붉은 꽃잎처럼 따뜻한 하루가 될 거야.",
+      "기대하지 않아도 좋은 일이 찾아와.",
+      "오늘은 네가 빛나는 날이야.",
+      "잊지 마, 너는 충분히 멋진 사람이야.",
+      "행운은 늘 조용히, 그러나 확실히 다가온다.",
+      "검은 날개 아래에 숨은 건 새로운 시작이야.",
+      "네 발자국마다 행운이 피어나길."
+    ];
+
+    const crow = document.getElementById("crowIcon");
+    const messageBox = document.getElementById("messageBox");
+
+    function createParticle() {
+      const particle = document.createElement("div");
+      particle.classList.add("particle");
+
+      const isFeather = Math.random() < 0.5;
+      particle.style.backgroundImage = isFeather
+        ? "url('https://cdn-icons-png.flaticon.com/512/616/616408.png')" // 검은 깃털
+        : "url('https://cdn-icons-png.flaticon.com/512/616/616408.png')"; // 나중에 붉은 꽃잎 이미지 교체 가능
+
+      if (!isFeather) {
+        particle.style.filter = "hue-rotate(330deg) saturate(3)"; // 붉은 톤 변환
+      }
+
+      particle.style.left = Math.random() * 100 + "vw";
+      particle.style.top = "-20px";
+      particle.style.width = Math.random() * 20 + 10 + "px";
+      particle.style.height = particle.style.width;
+      particle.style.animationDuration = 3 + Math.random() * 2 + "s";
+
+      document.body.appendChild(particle);
+
+      setTimeout(() => particle.remove(), 5000);
+    }
+
+    crow.addEventListener("click", () => {
+      const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+      messageBox.textContent = randomMessage;
+      messageBox.classList.add("show");
+
+      for (let i = 0; i < 20; i++) {
+        setTimeout(createParticle, i * 100);
+      }
+    });
+  </script>
+</body>
+</html>
