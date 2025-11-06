@@ -19,9 +19,11 @@
     }
 
     .crow {
-      width: 100px;
+      width: 110px;
       cursor: pointer;
       transition: transform 0.3s ease;
+      fill: #000;
+      filter: drop-shadow(0 0 4px rgba(255,255,255,0.2));
     }
 
     .crow:hover {
@@ -29,12 +31,13 @@
     }
 
     .message {
-      margin-top: 20px;
+      margin-top: 25px;
       font-size: 1.4rem;
       text-align: center;
       opacity: 0;
-      transition: opacity 0.5s ease;
+      transition: opacity 0.6s ease;
       max-width: 80%;
+      line-height: 1.5;
     }
 
     .show {
@@ -45,9 +48,10 @@
       position: absolute;
       width: 20px;
       height: 20px;
-      background-size: cover;
+      background-size: contain;
+      background-repeat: no-repeat;
       pointer-events: none;
-      animation: fall 3s linear forwards;
+      animation: fall 3.5s linear forwards;
     }
 
     @keyframes fall {
@@ -63,8 +67,10 @@
   </style>
 </head>
 <body>
-  <!-- 까마귀 아이콘 (SVG 형식) -->
-  <img src="https://upload.wikimedia.org/wikipedia/commons/0/07/Crow_silhouette.svg" alt="crow" class="crow" id="crowIcon">
+  <!-- 까마귀 아이콘 (직접 SVG 내장) -->
+  <svg class="crow" id="crowIcon" viewBox="0 0 640 512">
+    <path d="M575.2 255.5L483.1 279.1l-46.6 91.3c-3.4 6.8-10.3 11.3-17.9 11.3H400c-11 0-20-9-20-20v-24l-48-8-48 8v24c0 11-9 20-20 20h-18.6c-7.6 0-14.5-4.4-17.9-11.3l-46.6-91.3-92.1-23.6C36.3 247.7 0 207.2 0 159.9 0 104.9 49.1 56 112 56c40.7 0 76.2 20.1 96.4 50.6 8.8-2.2 18.2-3.3 27.6-3.3h64c8.3 0 16.4 0.9 24.3 2.8C364.5 68.9 417.7 32 480 32c88.4 0 160 71.6 160 160 0 29.3-7.9 56.8-21.8 80.5z"/>
+  </svg>
 
   <div class="message" id="messageBox"></div>
 
@@ -85,27 +91,23 @@
     const crow = document.getElementById("crowIcon");
     const messageBox = document.getElementById("messageBox");
 
+    const featherImg = "https://cdn-icons-png.flaticon.com/512/616/616554.png"; // 검은 깃털
+    const petalImg = "https://cdn-icons-png.flaticon.com/512/763/763689.png"; // 붉은 꽃잎
+
     function createParticle() {
       const particle = document.createElement("div");
       particle.classList.add("particle");
 
       const isFeather = Math.random() < 0.5;
-      particle.style.backgroundImage = isFeather
-        ? "url('https://cdn-icons-png.flaticon.com/512/616/616408.png')" // 검은 깃털
-        : "url('https://cdn-icons-png.flaticon.com/512/616/616408.png')"; // 나중에 붉은 꽃잎 이미지 교체 가능
-
-      if (!isFeather) {
-        particle.style.filter = "hue-rotate(330deg) saturate(3)"; // 붉은 톤 변환
-      }
-
+      particle.style.backgroundImage = `url(${isFeather ? featherImg : petalImg})`;
       particle.style.left = Math.random() * 100 + "vw";
       particle.style.top = "-20px";
-      particle.style.width = Math.random() * 20 + 10 + "px";
-      particle.style.height = particle.style.width;
+      const size = Math.random() * 20 + 10;
+      particle.style.width = size + "px";
+      particle.style.height = size + "px";
       particle.style.animationDuration = 3 + Math.random() * 2 + "s";
 
       document.body.appendChild(particle);
-
       setTimeout(() => particle.remove(), 5000);
     }
 
@@ -114,7 +116,7 @@
       messageBox.textContent = randomMessage;
       messageBox.classList.add("show");
 
-      for (let i = 0; i < 20; i++) {
+      for (let i = 0; i < 25; i++) {
         setTimeout(createParticle, i * 100);
       }
     });
